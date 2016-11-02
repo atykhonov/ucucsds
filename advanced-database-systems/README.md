@@ -80,7 +80,7 @@ chmod 600 cloudera.pem
 
 On top of the list you can see the running instance. The one which has been recently created.
 
-From the bottom panel take `Public IP` of the instance and put it to `/etc/hosts`:
+From the bottom panel take `Public IP` of the instance and put it to `/etc/hosts` (please, don't do it in this way if you did it once for `master.cloudera`. Edit `/etc/hosts` using any text editor instead and modify existing record):
 
 ```
 sudo -s
@@ -95,7 +95,7 @@ Then, on the local machine execute the following in order to connect to master i
 ssh -i cloudera.pem ec2-user@master.cloudera
 ```
 
-Please specify the full path to the `cloudera.pem` if it is not located in the current directory.
+Please specify the full path to the `cloudera.pem` if it is not located in the current directory. You might be asked: `Are you sure you want to continue connecting (yes/no)?`. Say: yes!
 
 As the result you should get the shell:
 
@@ -111,11 +111,13 @@ In order to launch slave, you could perform the same steps as for master, except
 
 2) You don't need to create a network or subnet (select existing one).
 
-3) Select an existing key pair (e.g. cloudera.pm).
+3) Please, don't forget to change `Auto-assign Public IP` to `Enable`.
+
+4) Select an existing key pair (e.g. cloudera.pm).
 
 ## Check that you can connect to slave
 
-Take the `Public IP` of slave and put it to `/etc/hosts`:
+Take the `Public IP` of slave instance and put it to `/etc/hosts` (please, don't do it in this way if you did it once for `slave.cloudera`. Edit `/etc/hosts` using any text editor instead and modify existing record):
 
 ```
 sudo -s
@@ -408,20 +410,26 @@ sudo ./cloudera-manager-installer.bin
 
 ![Cloudera installation](./images/cloudera-installation.png)
 
-Click `Next`, then `Next`, accept the license, `Next` accept the license again, and wait until it will be installed.
+Click `Next`, then `Next`, accept the license, click `Next`, accept the license again, and wait until it will be installed.
 
 When installation is finished, the wizard prompts you to visit `http://master.cloudera:7180/`. Do it!
 
 
 # Cloudera configuration
 
-So, open `http://master.cloudera:7180/` and you'll get login page. Use username `admin` and password `admin`. (If you don't see login page, but page not found just wait for a while and try again).
+Open `http://master.cloudera:7180/` and you'll get login page. Use username `admin` and password `admin`. (If you don't see login page, but "Unable to load page" instead, just wait for a while and try again).
 
-On the next page accept the licence.
+## End User License Terms and Conditions
 
-On the next page choose default edition (i.e. just click `Continue`).
+Check `Yes, I accept the End User License Terms and Conditions.` and click `Continue`.
 
-On the next page again click `Continue`.
+## Which edition do you want to deploy?
+
+Click `Continue`.
+
+## Thank you for choosing Cloudera Manager and CDH.
+
+Click `Continue`.
 
 ## Specify hosts for your CDH cluster installation.
 
@@ -465,7 +473,7 @@ Most probably you'll see the same errors as could be seen on the screenshot:
 
 ![SSH credentials](./images/inspect-hosts.png)
 
-So, in order to fix them execute the following:
+So, in order to fix them execute the following (master instance):
 
 ```
 sudo -s
@@ -479,7 +487,7 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
 exit
 ```
 
-Click `Continue`.
+Click `Run Again`. The errors should be absent. Click `Finish`.
 
 ## Choose the CDH 5 services that you want to install on your cluster
 
@@ -500,6 +508,10 @@ Click `Continue`.
 ## First Run
 
 Pray!
+
+## Congratulations!
+
+Click `Finish`.
 
 # Cloudera Manager
 
@@ -528,6 +540,57 @@ Input `90` into `Critical` input field and `Save Changes`.
 
 Now, go to home page and see that instead of error we have the warning.
 
+## HDFS configuration
+
+On the home page click `HDFS` link (`Status` section).
+
+Click `Configuration` and input `dfs.permissions`.
+
+![dfs permissions](./images/dfs-permissions.png)
+
+Uncheck `HDFS (Service-Wide)` and click `Save Changes`.
+
+![hdfs restart](./images/restart-hdfs.png)
+
+Near `Actions` button you'll see restart button. Click it.
+
+![restart stale services](./images/restart-stale-services.png)
+
+Click `Restart Stale Services`.
+
+![restart now](./images/restart-now.png)
+
+Check `Re-deploy client configuration` and click `Restart Now`.
+
+After a while the services will be restarted.
+
+![services restarted](./images/services-restarted.png)
+
+Click `Finish`.
+
+## YARN configuration
+
+On the home page click `YARN (MR2 Included)` link.
+
+Go to `Configuration` page and input `yarn.nodemanager.resource.memory-mb`.
+
+![yarn memory](./images/yarn-memory.png)
+
+Input `2.5`. Please make sure that `GiB` is selected. Click `Save Changes`.
+
+Now, instead of `yarn.nodemanager.resource.memory-mb` please input `yarn.scheduler.minimum-allocation-mb`.
+
+![minimum allocation](./images/minimum-allocation.png)
+
+Input `750` and make sure that `MiB` is selected. Click `Save Changes`.
+
+![redeployment](./images/redeployment.png)
+
+Near `Actions` button you can see two icons. Click on the second one (redeployment).
+
+On the next screen click `Restart Stale Services`. And then click `Restart Now`.
+
+After a while all services will be restarted. Click `Finish`.
 
 ## Execution of test application on a single node (master)
 
@@ -535,6 +598,12 @@ Download test application `wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar` and
 
 ```
 scp -i cloudera.pem wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar ec2-user@master.cloudera:/home/ec2-user/
+```
+
+Connect to master instance:
+
+```
+ssh -i cloudera.pem ec2-user@master.cloudera
 ```
 
 Then execute the following commands:
@@ -560,7 +629,326 @@ echo "Oh what a yellow fellow is Hadoop" > file2
 
 hadoop fs -put file* /home/root/wordcount/input
 
-## Commented out: it is to early to execute this command. The documentation needs to be updated.
-## hadoop jar wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar WordCount /home/root/wordcount/input /home/root/wordcount/output
+hadoop jar wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar WordCount /home/root/wordcount/input /home/root/wordcount/output
+```
+
+The following output could be seen in response:
 
 ```
+16/11/02 06:19:31 INFO client.RMProxy: Connecting to ResourceManager at master.cloudera/172.30.191.118:8032
+16/11/02 06:19:32 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+
+16/11/02 06:19:34 INFO input.FileInputFormat: Total input paths to process : 3
+16/11/02 06:19:35 INFO mapreduce.JobSubmitter: number of splits:3
+16/11/02 06:19:35 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1478081832568_0001
+16/11/02 06:19:36 INFO impl.YarnClientImpl: Submitted application application_1478081832568_0001
+16/11/02 06:19:36 INFO mapreduce.Job: The url to track the job: http://master.cloudera:8088/proxy/application_1478081832568_0001/
+16/11/02 06:19:36 INFO mapreduce.Job: Running job: job_1478081832568_0001
+16/11/02 06:19:47 INFO mapreduce.Job: Job job_1478081832568_0001 running in uber mode : false
+16/11/02 06:19:47 INFO mapreduce.Job:  map 0% reduce 0%
+16/11/02 06:19:55 INFO mapreduce.Job:  map 33% reduce 0%
+16/11/02 06:19:59 INFO mapreduce.Job:  map 67% reduce 0%
+16/11/02 06:20:06 INFO mapreduce.Job:  map 100% reduce 0%
+16/11/02 06:20:13 INFO mapreduce.Job:  map 100% reduce 100%
+16/11/02 06:20:14 INFO mapreduce.Job: Job job_1478081832568_0001 completed successfully
+16/11/02 06:20:14 INFO mapreduce.Job: Counters: 49
+        File System Counters
+                FILE: Number of bytes read=143
+                FILE: Number of bytes written=489960
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=458
+                HDFS: Number of bytes written=80
+                HDFS: Number of read operations=12
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+        Job Counters 
+                Launched map tasks=3
+                Launched reduce tasks=1
+                Data-local map tasks=3
+                Total time spent by all maps in occupied slots (ms)=31530
+                Total time spent by all reduces in occupied slots (ms)=9136
+                Total time spent by all map tasks (ms)=15765
+                Total time spent by all reduce tasks (ms)=4568
+                Total vcore-seconds taken by all map tasks=15765
+                Total vcore-seconds taken by all reduce tasks=4568
+                Total vcore-seconds taken by all map tasks=15765                                                                            [0/108]
+                Total vcore-seconds taken by all reduce tasks=4568
+                Total megabyte-seconds taken by all map tasks=16143360
+                Total megabyte-seconds taken by all reduce tasks=4677632
+        Map-Reduce Framework
+                Map input records=3
+                Map output records=18
+                Map output bytes=158
+                Map output materialized bytes=224
+                Input split bytes=372
+                Combine input records=18
+                Combine output records=17
+                Reduce input groups=12
+                Reduce shuffle bytes=224
+                Reduce input records=17
+                Reduce output records=12
+                Spilled Records=34
+                Shuffled Maps =3
+                Failed Shuffles=0
+                Merged Map outputs=3
+                GC time elapsed (ms)=241
+                CPU time spent (ms)=2290
+                Physical memory (bytes) snapshot=1526329344
+                Virtual memory (bytes) snapshot=6335172608
+                Total committed heap usage (bytes)=1474822144
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters 
+                Bytes Read=86
+        File Output Format Counters 
+                Bytes Written=80
+```
+
+So far so good!
+
+## Check the results of the execution
+
+Go to `YARN (MR2 Included)`. Then open `Applications` page.
+
+![yarn applications](./images/yarn-applications-page.png)
+
+You can see the results of executed application.
+
+Go to `Web UI` -> `ResourceManager Web UI (master)`.
+
+![hadoop applications](./images/hadoop-applications.png)
+
+Click on application link (e.g. `application_1478081832568_0001`).
+
+![applications history](./images/hadoop-applications-history.png)
+
+Click `History` link.
+
+![services restarted](./images/hadoop-application-job.png)
+
+Click `3` link, in `Maps` row, `Successfull` column.
+
+![succesful map attempts](./images/successful-map-attempts.png)
+
+
+## Execution of test application on master and slave
+
+Go to `Cloudera Manager`. Then `Hosts` -> `All Hosts`.
+
+![all hosts](./images/all-hosts.png)
+
+Click `Add New Hosts to Cluster`.
+
+On the next screen click `Continue`.
+
+### Specify hosts for your CDH cluster installation.
+
+![specify hosts slave](./images/specify-hosts-slave.png)
+
+Input private IP of slave instance and click `Search`.
+
+Slave instance is selected. Click `Continue`.
+
+![select repository](./images/select-repository-slave.png)
+
+Click `Continue`.
+
+![jdk installation slave](./images/jdk-installation-slave.png)
+
+Check `Install Oracle Java SE Development Kit (JDK)` and click `Continue`.
+
+![ssh credentials slave](./images/ssh-credentials-slave.png)
+
+Select `Another user` and input `ec2-user`. Then select `Authentication Method` equals to `All hosts accept same private key`, click on `Choose File` and open `cloudera.pem` file. Click `Continue`. You will be asked: `Continue SSH login with no passphrase?`. Say: Ok!
+
+### Installation in progress.
+
+Click `Continue`.
+
+### Installing Selected Parcels 
+
+Coffee time again (~5m). After coffee break click `Continue`.
+
+### Inspect hosts
+
+Most probably you'll see the same errors as could be seen on the screenshot:
+
+![Inspect hosts on slave](./images/inspect-hosts.png)
+
+So, in order to fix them execute the following (slave instance):
+
+```
+sudo -s
+
+sysctl vm.swappiness=10
+
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+exit
+```
+
+Click on `Run Again` and see that the errors are absent. Click `Continue`.
+
+### Choose a host template
+
+![Host template](./images/host-template.png)
+
+Select `None`. And click `Continue`.
+
+![Deploy client configuration](./images/deploy-client-configuration-slave.png)
+
+Click `Finish`.
+
+
+### HDFS configuration
+
+Go to `HDFS`, click `Actions` button and select `Add Role Instances`.
+
+![Role instances](./images/role-instances.png)
+
+Select `All Hosts` for `DataNode`.
+
+![Role instances](./images/hdfs-role-all-hosts.png)
+
+Click `Continue` and then click `Finish`.
+
+On the top, near `Actions` button you'll see deployment icon. Click it.
+
+On the next screen click `Refresh & Deploy Client Config`. And click `Finish`.
+
+### YARN configuration
+
+Go to `YARN (MR2 Included)`, click `Actions` button and select `Add Role Instances`.
+
+Select `All Hosts` for `NodeManager`.
+
+Click `Continue` and then click `Finish`.
+
+On the top, near `Actions` button you'll see deployment icon. Click it.
+
+On the next screen click `Deploy Client Configuration`. And click `Finish`.
+
+### Start Roles on Hosts
+
+Go to `Hosts` -> `All Hosts`. Select `slave.cloudera` link from the list. Click `Actions` button and select `Start Roles on Hosts`.
+
+### Execute test application
+
+Connect to master instance:
+
+```
+ssh -i cloudera.pem ec2-user@master.cloudera
+```
+
+Then execute the following commands:
+
+```
+hadoop jar wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar WordCount /home/root/wordcount/input /home/root/wordcount/output2
+```
+
+It is mostly the same as the previous one, except that the last argument is `/home/root/wordcount/output2` instead of `/home/root/wordcount/output`.
+
+The following output could be seen in response:
+
+```
+16/11/02 07:13:55 INFO client.RMProxy: Connecting to ResourceManager at master.cloudera/172.30.191.118:8032
+16/11/02 07:13:56 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+16/11/02 07:13:56 INFO input.FileInputFormat: Total input paths to process : 3
+16/11/02 07:13:57 INFO mapreduce.JobSubmitter: number of splits:3
+16/11/02 07:13:57 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1478081832568_0002
+16/11/02 07:13:57 INFO impl.YarnClientImpl: Submitted application application_1478081832568_0002
+16/11/02 07:13:57 INFO mapreduce.Job: The url to track the job: http://master.cloudera:8088/proxy/application_1478081832568_0002/
+16/11/02 07:13:57 INFO mapreduce.Job: Running job: job_1478081832568_0002
+16/11/02 07:14:07 INFO mapreduce.Job: Job job_1478081832568_0002 running in uber mode : false
+16/11/02 07:14:07 INFO mapreduce.Job:  map 0% reduce 0%
+16/11/02 07:14:13 INFO mapreduce.Job:  map 33% reduce 0%
+16/11/02 07:14:19 INFO mapreduce.Job:  map 67% reduce 0%
+16/11/02 07:14:25 INFO mapreduce.Job:  map 100% reduce 0%
+16/11/02 07:14:34 INFO mapreduce.Job:  map 100% reduce 100%
+16/11/02 07:14:35 INFO mapreduce.Job: Job job_1478081832568_0002 completed successfully
+16/11/02 07:14:35 INFO mapreduce.Job: Counters: 49
+        File System Counters
+                FILE: Number of bytes read=143
+                FILE: Number of bytes written=490060
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=458
+                HDFS: Number of bytes written=80
+                HDFS: Number of read operations=12
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=2
+        Job Counters 
+                Launched map tasks=3
+                Launched reduce tasks=1
+                Data-local map tasks=3
+                Total time spent by all maps in occupied slots (ms)=26090
+                Total time spent by all reduces in occupied slots (ms)=13172
+                Total time spent by all map tasks (ms)=13045
+                Total time spent by all reduce tasks (ms)=6586
+                Total vcore-seconds taken by all map tasks=13045
+                Total vcore-seconds taken by all reduce tasks=6586
+                Total megabyte-seconds taken by all map tasks=13358080
+                Total megabyte-seconds taken by all reduce tasks=6744064
+        Map-Reduce Framework
+                Map input records=3
+                Map output records=18
+                Map output bytes=158
+                Map output materialized bytes=224
+                Input split bytes=372
+                Combine input records=18
+                Combine output records=17
+                Reduce input groups=12
+                Reduce shuffle bytes=224
+                Reduce input records=17
+                Reduce output records=12
+                Spilled Records=34
+                Shuffled Maps =3
+                Failed Shuffles=0
+                Merged Map outputs=3
+                GC time elapsed (ms)=222
+                CPU time spent (ms)=2610
+                Physical memory (bytes) snapshot=1553723392
+                Virtual memory (bytes) snapshot=6366474240
+                Total committed heap usage (bytes)=1410859008
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters 
+                Bytes Read=86
+        File Output Format Counters 
+                Bytes Written=80
+```
+
+So far so good.
+
+### Check the results of the execution
+
+Go to `YARN (MR2 Included)`, select `Applications`. You can see recently executed application.
+
+Click `Web UI` -> `Resource Manager Web UI (master)`.
+
+Click `application_1478081832568_0002` application link.
+
+Click `History` link.
+
+Then click `3` link on the bottom of the page (`Maps` row, `Successful` column).
+
+![map attempts master and slave](./images/map-attempts-master-slave.png)
+
+Make sure that in the column `Node` there are present both master and slave!
+
+That's all!
