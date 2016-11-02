@@ -85,7 +85,7 @@ From the bottom panel take `Public IP` of the instance and put it to `/etc/hosts
 ```
 sudo -s
 
-echo "54.205.76.36 master.cloudera" >> /etc/hosts
+echo "54.146.201.153 master.cloudera" >> /etc/hosts
 ```
 
 
