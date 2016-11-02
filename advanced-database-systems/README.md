@@ -385,88 +385,6 @@ Here should be the same output: `slave.cloudera`.
 
 Our host name has been successfully changed!
 
-## Configure SSH access between master and slave
-
-On your local machine please execute the following command which will copy `cloudera.pem` to master instance:
-
-```
-scp -i cloudera.pem cloudera.pem ec2-user@master.cloudera:/home/ec2-user/
-```
-
-Now the same but for slave:
-
-```
-scp -i cloudera.pem cloudera.pem ec2-user@slave.cloudera:/home/ec2-user/
-```
-
-Now, connect to master:
-
-```
-ssh -i cloudera.pem ec2-user@master.cloudera
-```
-
-And execute the following commands:
-
-```
-sudo -s
-
-cd ~/.ssh/
-
-cp /home/ec2-user/cloudera.pem ~/.ssh/
-
-mv cloudera.pem id_rsa
-
-chmod 600 id_rsa
-
-chown root:root id_rsa
-
-exit
-```
-
-Now, please connect to slave and perform exactly the same steps.
-
-After that, try to connect to master instance from slave:
-
-```
-[root@slave .ssh]# sudo ssh ec2-user@master.cloudera
-The authenticity of host 'master.cloudera (172.30.243.82)' can't be established.
-ECDSA key fingerprint is 0f:bd:16:44:93:63:84:7b:6c:8c:57:8e:b7:e6:eb:af.
-Are you sure you want to continue connecting (yes/no)? yes
-Warning: Permanently added 'master.cloudera,172.30.243.82' (ECDSA) to the list of known hosts.
-Last login: Tue Nov  1 16:53:21 2016 from 193.84.22.38
-[ec2-user@master ~]$
-```
-
-You should get master's slave in response. Now, exit from master and slave:
-
-```
-exit
-exit
-```
-
-Connect from local machine to master again and try to connect to slave instance:
-
-```
-ssh -i cloudera.pem ec2-user@master.cloudera
-```
-
-Try to connect to slave instance from master:
-
-```
-[ec2-user@master ~]$ sudo ssh ec2-user@slave.cloudera
-Last login: Tue Nov  1 17:01:06 2016 from master.cloudera
-[ec2-user@slave ~]$
-```
-
-You should get slave's shell in response.
-
-Now:
-
-```
-exit
-exit
-```
-
 # Install cloudera
 
 
@@ -642,6 +560,7 @@ echo "Oh what a yellow fellow is Hadoop" > file2
 
 hadoop fs -put file* /home/root/wordcount/input
 
-hadoop jar wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar WordCount /home/root/wordcount/input /home/root/wordcount/output
+## Commented out: it is to early to execute this command. The documentation needs to be updated.
+## hadoop jar wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar WordCount /home/root/wordcount/input /home/root/wordcount/output
 
 ```
