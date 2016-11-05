@@ -951,4 +951,32 @@ Then click `3` link on the bottom of the page (`Maps` row, `Successful` column).
 
 Make sure that in the column `Node` there are present both master and slave!
 
-That's all!
+# Stopping instances
+
+Actually there are two options:
+
+### Terminate the instances
+
+If you terminate your instances, they will be destroyed. So all work will be lost. But we need it in order to accomplish further tasks.
+
+### Stop the instances
+
+Probably it is better to stop the instances. Later you can start them. However, you need to pay money for stopped instances. Stopped instances are cheaper than running.
+
+## Start the stopped instances
+
+First of all, please, start slave instance. Wait until it is initialized and try to connect to it. After you are successfully connected, start master instance.
+
+![host monitor](./images/host-monitor-after-restart.png)
+
+Probably, you'll be experiencing the same issues as could be seen on the screenshot above.
+
+In this case, please, in the yellow area, find and click `View the status of the Service Monitor`. Then click `Actions` button and select `Restart`.
+
+Then go to home page, click `View the status of the Host Monitor`, then click `Actions` button and select `Restart`.
+
+After that, I would recommend to restart whole cluster. Go to home page, click on `Cluster 1` link, then click `Actions` button and select `Restart`.
+
+Go to home page and make sure that there is no any service in bad health (a service in bad health is red).
+
+If everything is ok, your cluster is ready to be used.
