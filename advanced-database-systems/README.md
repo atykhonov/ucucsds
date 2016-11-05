@@ -190,27 +190,20 @@ sudo sed -i 's/LANG=en_US.UTF-8/LANG=en_US.UTF-8 selinux=0/g;' /boot/grub2/grub.
 Please check:
 
 ```
-sudo cat /boot/grub2/grub.cfg
+sudo cat /boot/grub2/grub.cfg | grep -C 2 "selinux=0"
 ```
 
-Please check that there is `selinux=0` in the end of line with `/boot/vmlinuz-...`.
+You should get something like the following:
 
 ```
-menuentry 'Red Hat Enterprise Linux Server (3.10.0-327.el7.x86_64) 7.2 (Maipo)' --class red --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-327.el7.x86_64-advanced-379de64d-ea11-4f5b-ae6a-0aa50ff7b24d' {
-        load_video
-        set gfxpayload=keep
-        insmod gzio
-        insmod part_gpt
-        insmod xfs
-        set root='hd0,gpt2'
-        if [ x$feature_platform_search_hint = xy ]; then
-          search --no-floppy --fs-uuid --set=root --hint='hd0,gpt2'  379de64d-ea11-4f5b-ae6a-0aa50ff7b24d
-        else
           search --no-floppy --fs-uuid --set=root 379de64d-ea11-4f5b-ae6a-0aa50ff7b24d
         fi
         linux16 /boot/vmlinuz-3.10.0-327.el7.x86_64 root=UUID=379de64d-ea11-4f5b-ae6a-0aa50ff7b24d ro console=ttyS0,115200n8 console=tty0 net.ifnames=0 crashkernel=auto LANG=en_US.UTF-8 selinux=0
         initrd16 /boot/initramfs-3.10.0-327.el7.x86_64.img
+}
 ```
+
+If you don't see any output, then something is wrong.
 
 Now, please reboot your instance:
 
@@ -536,7 +529,7 @@ Click on `Change Under-replicated Block Monitoring Thresholds for this service`.
 ![Under-Replicated Configuration](./images/under-replicated-configuration.png)
 
 
-Input `90` into `Critical` input field and `Save Changes`.
+Input `100` into `Critical` and `Warning` input fields and `Save Changes`.
 
 Now, go to home page and see that instead of error we have the warning.
 
