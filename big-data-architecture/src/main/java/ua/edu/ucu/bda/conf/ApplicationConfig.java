@@ -14,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @ComponentScan(basePackages = {"ua.edu.ucu.bda"})
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:football_columns.properties")
 public class ApplicationConfig {
 
     @Autowired
