@@ -32,7 +32,7 @@ public class Application {
     @Autowired
     private ValidationSummary validationSummary;
 
-    public void oneTwoThreeFire() {
+    public void exec() {
         /*
          One, Two, Three, Fire!!!
          */
