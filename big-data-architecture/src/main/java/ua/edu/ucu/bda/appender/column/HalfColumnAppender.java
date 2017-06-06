@@ -7,9 +7,6 @@ import ua.edu.ucu.bda.appender.column.udf.HalfColumnAppenderUDF;
 
 import static org.apache.spark.sql.functions.column;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Service
 public class HalfColumnAppender implements ColumnAppender {
 

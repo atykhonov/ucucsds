@@ -7,9 +7,6 @@ import org.apache.spark.sql.types.DataTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.edu.ucu.bda.infra.UDF;
 
-/**
- * Created by demi on 4/17/17.
- */
 public abstract class ValidatorUDF extends UDF {
 
     @Autowired

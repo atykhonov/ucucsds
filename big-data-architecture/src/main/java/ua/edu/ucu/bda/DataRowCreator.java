@@ -10,9 +10,6 @@ import ua.edu.ucu.bda.utils.ColumnValueMapperUtils;
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- * Created by demi on 4/15/17.
- */
 @Service
 public class DataRowCreator implements Serializable {
 

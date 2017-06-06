@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 
-/**
- * Created by Evegeny on 21/04/2016.
- */
 @Component
 public class AutowiredBroadcastBPP implements BeanPostProcessor {
 

@@ -3,9 +3,6 @@ package ua.edu.ucu.bda;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.edu.ucu.bda.conf.ApplicationConfig;
 
-/**
- * Created by demi on 4/15/17.
- */
 public class Main {
 
     public static void main(String[] args) {

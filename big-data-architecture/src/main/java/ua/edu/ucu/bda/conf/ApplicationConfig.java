@@ -9,9 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-/**
- * Created by demi on 4/9/17.
- */
 @Configuration
 @ComponentScan(basePackages = {"ua.edu.ucu.bda"})
 @PropertySource("classpath:football_columns.properties")

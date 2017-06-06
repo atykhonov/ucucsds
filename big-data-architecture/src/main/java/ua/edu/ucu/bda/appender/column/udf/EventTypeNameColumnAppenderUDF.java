@@ -11,9 +11,6 @@ import ua.edu.ucu.bda.infra.UDF;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class EventTypeNameColumnAppenderUDF extends UDF implements UDF1<String, String> {
 

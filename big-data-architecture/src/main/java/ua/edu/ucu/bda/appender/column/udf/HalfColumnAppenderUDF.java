@@ -10,9 +10,6 @@ import ua.edu.ucu.bda.utils.MatchTimeParserUtils;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class HalfColumnAppenderUDF extends UDF implements UDF1<String, Integer> {
 

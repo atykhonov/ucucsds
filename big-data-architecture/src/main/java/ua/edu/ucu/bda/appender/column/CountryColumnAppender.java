@@ -6,9 +6,6 @@ import ua.edu.ucu.bda.appender.column.udf.CountryColumnAppenderUDF;
 
 import static org.apache.spark.sql.functions.column;
 
-/**
- * Created by demi on 4/17/17.
- */
 public abstract class CountryColumnAppender implements ColumnAppender {
 
     @Autowired

@@ -1,7 +1,6 @@
 package ua.edu.ucu.bda.appender.column;
 
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.DataFrame;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,7 +8,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.edu.ucu.bda.EventType;
 import ua.edu.ucu.bda.FootballDataFrameCreator;
-import ua.edu.ucu.bda.UserConfig;
 import ua.edu.ucu.bda.utils.BaseTest;
 
 import java.util.Arrays;

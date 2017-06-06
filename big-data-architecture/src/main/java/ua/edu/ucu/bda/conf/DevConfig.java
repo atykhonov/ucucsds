@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-/**
- * Created by demi on 4/8/17.
- */
 @Configuration
 @Profile("DEV")
 public class DevConfig {

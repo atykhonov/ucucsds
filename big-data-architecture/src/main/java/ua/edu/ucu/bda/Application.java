@@ -13,9 +13,6 @@ import ua.edu.ucu.bda.validation.ValidationSummary;
 
 import java.util.Map;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class Application {
 

@@ -2,9 +2,6 @@ package ua.edu.ucu.bda.appender.column;
 
 import org.springframework.stereotype.Service;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Service
 public class Country1ColumnAppender extends CountryColumnAppender {
 
