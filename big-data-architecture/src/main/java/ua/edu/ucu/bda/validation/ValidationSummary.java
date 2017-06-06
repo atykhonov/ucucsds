@@ -3,15 +3,11 @@ package ua.edu.ucu.bda.validation;
 import org.apache.spark.sql.DataFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.edu.ucu.bda.UserConfig;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Service
 public class ValidationSummary {
 
@@ -28,5 +24,9 @@ public class ValidationSummary {
             summary.put(errorColumn, errors);
         }
         return summary;
+    }
+
+    public List<DataFrameValidator> getValidators() {
+        return validators;
     }
 }

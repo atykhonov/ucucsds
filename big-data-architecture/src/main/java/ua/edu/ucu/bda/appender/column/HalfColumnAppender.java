@@ -13,9 +13,9 @@ import static org.apache.spark.sql.functions.column;
 @Service
 public class HalfColumnAppender implements ColumnAppender {
 
-    private static final String HALF_COLUMN_NAME = "half";
+    public static final String HALF_COLUMN_NAME = "half";
 
-    private static final String EVENT_TIME_COLUMN_NAME = "eventTime";
+    public static final String EVENT_TIME_COLUMN_NAME = "eventTime";
 
     @Autowired
     private HalfColumnAppenderUDF appenderUDF;

@@ -7,9 +7,6 @@ import ua.edu.ucu.bda.UserConfig;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class PlayerValidatorUDF extends ValidatorUDF implements UDF1<String, Boolean> {
 

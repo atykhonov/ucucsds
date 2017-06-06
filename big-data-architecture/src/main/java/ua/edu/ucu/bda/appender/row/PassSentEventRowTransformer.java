@@ -9,7 +9,6 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.edu.ucu.bda.DataRowCreator;
 import ua.edu.ucu.bda.UserConfig;
 import ua.edu.ucu.bda.utils.ColumnUtils;
 
@@ -19,20 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by demi on 4/17/17.
- */
+
 @Service
 public class PassSentEventRowTransformer implements Serializable {
 
-    private static final String CODE_COLUMN_NAME = "code";
+    public static final String CODE_COLUMN_NAME = "code";
 
-    private static final String FROM_COLUMN_NAME = "from";
+    public static final String FROM_COLUMN_NAME = "from";
 
-    private static final String TO_COLUMN_NAME = "to";
-
-    @Autowired
-    private DataRowCreator dataRowCreator;
+    public static final String TO_COLUMN_NAME = "to";
 
     @Autowired
     private UserConfig userConfig;
@@ -72,7 +66,6 @@ public class PassSentEventRowTransformer implements Serializable {
             return RowFactory.create(values);
         });
 
-        // JavaRDD<Row> rowRdd = rdd.map(dataRowCreator::createRowFromLine);
         StructField[] fields = new StructField[columnNames.size()];
         for (int i = 0; i < fields.length; i++) {
             fields[i] = DataTypes.createStructField(columnNames.get(i), DataTypes.StringType, true);

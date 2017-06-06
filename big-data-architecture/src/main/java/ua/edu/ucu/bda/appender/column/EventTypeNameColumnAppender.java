@@ -13,9 +13,9 @@ import static org.apache.spark.sql.functions.column;
 @Service
 public class EventTypeNameColumnAppender implements ColumnAppender {
 
-    private static final String EVENT_TYPE_NAME_COLUMN_NAME = "eventTypeName";
+    public static final String EVENT_TYPE_NAME_COLUMN_NAME = "eventTypeName";
 
-    private static final String EVENT_TYPE_COLUMN_NAME = "code";
+    public static final String EVENT_TYPE_COLUMN_NAME = "code";
 
     @Autowired
     private EventTypeNameColumnAppenderUDF appenderUDF;

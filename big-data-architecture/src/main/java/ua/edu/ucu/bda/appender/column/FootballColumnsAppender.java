@@ -7,9 +7,6 @@ import ua.edu.ucu.bda.appender.Appender;
 
 import java.util.List;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Service
 public class FootballColumnsAppender implements Appender {
 
@@ -18,9 +15,13 @@ public class FootballColumnsAppender implements Appender {
 
     @Override
     public DataFrame apply(DataFrame dataFrame) {
-        for (ColumnAppender appender : columnAppenders) {
+        for (ColumnAppender appender : getColumnAppenders()) {
             dataFrame = appender.apply(dataFrame);
         }
         return dataFrame;
+    }
+
+    public List<ColumnAppender> getColumnAppenders() {
+        return columnAppenders;
     }
 }

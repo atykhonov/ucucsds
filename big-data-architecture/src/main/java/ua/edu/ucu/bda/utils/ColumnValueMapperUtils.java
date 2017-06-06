@@ -1,12 +1,10 @@
 package ua.edu.ucu.bda.utils;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by demi on 4/15/17.
- */
-public class FileMapperUtils {
+public class ColumnValueMapperUtils implements Serializable {
 
     public static Map<String, String> getMap(String line) {
         Map<String, String> map = new HashMap<>();

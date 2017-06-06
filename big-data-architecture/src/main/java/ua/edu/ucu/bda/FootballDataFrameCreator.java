@@ -10,23 +10,16 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by demi on 4/15/17.
- */
 @Component
 public class FootballDataFrameCreator implements Serializable {
 
-    private static final String FOOTBALL_ROW_DATA_FILENAME = "data/football/rawData.txt";
-
     @Autowired
     private transient SQLContext sqlContext;
-
-    @Autowired
-    private transient JavaSparkContext sparkContext;
 
     @Autowired
     private DataRowCreator dataRowCreator;
@@ -34,8 +27,7 @@ public class FootballDataFrameCreator implements Serializable {
     @Autowired
     private UserConfig userConfig;
 
-    public DataFrame createDataFrame() {
-        JavaRDD<String> rdd = sparkContext.textFile(FOOTBALL_ROW_DATA_FILENAME);
+    public DataFrame createDataFrame(JavaRDD<String> rdd) {
         rdd = rdd.filter(line -> !line.isEmpty());
         JavaRDD<Row> rowRdd = rdd.map(dataRowCreator::createRowFromLine);
         List<String> columnNames = userConfig.columnNames;

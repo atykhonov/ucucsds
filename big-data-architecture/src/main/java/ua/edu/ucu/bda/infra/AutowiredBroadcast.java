@@ -1,6 +1,4 @@
-package ua.edu.ucu.bda.infra;/**
- * Created by Evegeny on 11/03/2017.
- */
+package ua.edu.ucu.bda.infra;
 
 import java.lang.annotation.Retention;
 

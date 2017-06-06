@@ -7,9 +7,6 @@ import ua.edu.ucu.bda.utils.ColumnUtils;
 
 import static org.apache.spark.sql.functions.col;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Service
 public class ReversedPassRowAppender implements RowAppender {
 

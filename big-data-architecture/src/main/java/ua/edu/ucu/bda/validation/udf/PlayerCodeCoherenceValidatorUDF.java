@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class PlayerCodeCoherenceValidatorUDF extends ValidatorUDF implements UDF2<String, String, Boolean> {
 

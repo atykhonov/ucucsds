@@ -5,11 +5,9 @@ import org.apache.spark.sql.RowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.edu.ucu.bda.utils.ColumnUtils;
-import ua.edu.ucu.bda.utils.FileMapperUtils;
+import ua.edu.ucu.bda.utils.ColumnValueMapperUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +20,7 @@ public class DataRowCreator implements Serializable {
     private ColumnUtils columnUtils;
 
     public Row createRowFromLine(String line) {
-        Map<String, String> map = FileMapperUtils.getMap(line);
+        Map<String, String> map = ColumnValueMapperUtils.getMap(line);
         return RowFactory.create(columnUtils.createColumnValuesFromMap(map));
     }
 }

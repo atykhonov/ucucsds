@@ -8,9 +8,6 @@ import ua.edu.ucu.bda.utils.MatchTimeParserUtils;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class EventTimeValidatorUDF extends ValidatorUDF implements UDF1<String, Boolean> {
 
@@ -30,11 +27,11 @@ public class EventTimeValidatorUDF extends ValidatorUDF implements UDF1<String, 
         try {
             Integer minutes = matchTimeParser.parseMinutes(eventTime);
             if (minutes > MAX_MINUTES_IN_GAME) {
-                return true;
+                return Boolean.TRUE;
             }
         } catch (MatchTimeFormatException e) {
-            return true;
+            return Boolean.TRUE;
         }
-        return false;
+        return Boolean.FALSE;
     }
 }

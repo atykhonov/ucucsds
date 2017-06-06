@@ -1,5 +1,7 @@
 package ua.edu.ucu.bda;
 
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.storage.StorageLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,11 @@ import java.util.Map;
  */
 @Component
 public class Application {
+
+    private static final String FOOTBALL_ROW_DATA_FILENAME = "data/football/rawData.txt";
+
+    @Autowired
+    private JavaSparkContext sparkContext;
 
     @Autowired
     private FootballDataFrameCreator dataFrameCreator;
@@ -36,7 +43,8 @@ public class Application {
         /*
          One, Two, Three, Fire!!!
          */
-        DataFrame dataFrame = dataFrameCreator.createDataFrame();
+        JavaRDD<String> rdd = sparkContext.textFile(FOOTBALL_ROW_DATA_FILENAME);
+        DataFrame dataFrame = dataFrameCreator.createDataFrame(rdd);
         dataFrame.persist(StorageLevel.MEMORY_AND_DISK());
 
         dataFrame = dataFrameValidator.validate(dataFrame);
@@ -45,7 +53,7 @@ public class Application {
                 "Data frame with invalid data: ", invalidDataFrame);
         showValidationSummary(validationSummary.getSummary(invalidDataFrame));
 
-        dataFrame = dataFrameValidator.getValidData(dataFrame);
+        dataFrame = dataFrameValidator.getValidData(dataFrame, true);
         showDataFrame("Data frame with valid data: ", dataFrame);
 
         dataFrame = rowsAppender.apply(dataFrame);

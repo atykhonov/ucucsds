@@ -8,9 +8,6 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * Created by demi on 4/15/17.
- */
 @Component
 public class UserConfig implements Serializable {
 

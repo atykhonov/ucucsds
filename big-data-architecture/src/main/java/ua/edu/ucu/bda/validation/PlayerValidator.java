@@ -6,9 +6,6 @@ import ua.edu.ucu.bda.validation.udf.PlayerValidatorUDF;
 
 import static org.apache.spark.sql.functions.column;
 
-/**
- * Created by demi on 4/17/17.
- */
 public abstract class PlayerValidator extends DataFrameValidator {
 
     public abstract String getPlayerColumnName();

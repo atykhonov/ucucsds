@@ -7,17 +7,14 @@ import ua.edu.ucu.bda.validation.udf.PlayerCodeCoherenceValidatorUDF;
 
 import static org.apache.spark.sql.functions.column;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class PlayerCodeCoherenceValidator extends DataFrameValidator {
 
-    private static final String ERROR_COLUMN_NAME = "errorPlayerCodeCoherence";
+    public static final String ERROR_COLUMN_NAME = "errorPlayerCodeCoherence";
 
-    private static final String CODE_COLUMN_NAME = "code";
+    public static final String CODE_COLUMN_NAME = "code";
 
-    private static final String TO_COLUMN_NAME = "to";
+    public static final String TO_COLUMN_NAME = "to";
 
     @Autowired
     private PlayerCodeCoherenceValidatorUDF validatorUDF;

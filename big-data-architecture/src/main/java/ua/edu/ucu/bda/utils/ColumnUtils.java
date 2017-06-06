@@ -12,9 +12,6 @@ import java.util.Map;
 
 import static org.apache.spark.sql.functions.col;
 
-/**
- * Created by demi on 4/17/17.
- */
 @Component
 public class ColumnUtils implements Serializable {
 
